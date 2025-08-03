@@ -5,7 +5,11 @@ import os
 
 app = Flask(__name__, template_folder='templates')
 
-conn = sqlite3.connect('users.db', check_same_thread=False)
+# Initialize DB path relative to current file
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'users.db')
+
+conn = sqlite3.connect(DB_PATH, check_same_thread=False)
 cursor = conn.cursor()
 
 @app.route('/')
@@ -88,5 +92,6 @@ def login():
     else:
         return jsonify({"status": "failed"})
 
+# No need to set host/port for Vercel
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5009, debug=True)
+    app.run(debug=True)
